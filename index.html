@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アントラーズスピリット計算機</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-50 via-white to-blue-50 p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-700 mb-2 flex items-center justify-center gap-2">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                </svg>
+                アントラーズスピリット計算機
+            </h1>
+            <p class="text-gray-600">アントラーズメンバーシッププログラムにおけるスピリットを計算して、あなたのランクを確認しよう！</p>
+            <p class="text-sm text-gray-500 mt-1">※スピリット獲得期間: 2026年1月1日〜2026年6月15日</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+                スピリット獲得項目を入力
+            </h2>
+
+            <div class="space-y-4">
+                <!-- ファンクラブ会員種別 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ファンクラブ会員種別</label>
+                    <select id="membershipType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="78000">SÓCIO（カテゴリー1）</option>
+                        <option value="68000">SÓCIO（カテゴリー2）</option>
+                        <option value="72000">SÓCIO（カテゴリー3）</option>
+                        <option value="62000">SÓCIO（カテゴリー4）</option>
+                        <option value="59000">SÓCIO（カテゴリー5）</option>
+                        <option value="57000">SÓCIO（カテゴリー6）</option>
+                        <option value="45000">SÓCIO（車椅子席）</option>
+                        <option value="37000">シーズンチケット大人</option>
+                        <option value="3500">シーズンチケットU-18</option>
+                        <option value="3300">ファンクラブレギュラー</option>
+                        <option value="1100">ファンクラブジュニア</option>
+                        <option value="550">ファンクラブライト</option>
+                    </select>
+                    <p id="membershipSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- 駐車場オプション -->
+                <div id="parkingSection" style="display: none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">駐車場オプション</label>
+                    <select id="parkingOption" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="0">なし</option>
+                        <option value="16500">鹿島サッカースタジアム駅西側駐車場</option>
+                        <option value="22000">B駐車場</option>
+                    </select>
+                    <p id="parkingSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- SÓCIO継続年数 -->
+                <div id="continuitySection" style="display: none;">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">SÓCIO継続年数</label>
+                    <input type="number" id="continuityYears" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 8" min="0">
+                    <p class="text-xs text-gray-500 mt-1">5〜9年: 5,000スピリット / 10年以上: 10,000スピリット</p>
+                </div>
+
+                <!-- アカデミーサポートクラブ -->
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <input type="checkbox" id="academySupport" class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                        <label for="academySupport" class="text-sm font-medium text-gray-700">アカデミーサポートクラブ口数（2026年1月以降の購入口数のみ対象）</label>
+                    </div>
+                    <div id="academyCountSection" style="display: none;">
+                        <input type="number" id="academyCount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 2" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1口=5,000スピリット</p>
+                    </div>
+                </div>
+
+                <!-- FREAKS入会時期 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">FREAKS入会時期</label>
+                    <select id="freaksJoin" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="not_joined">加入していない</option>
+                        <option value="2026-01">2026年1月orそれ以前</option>
+                        <option value="2026-02">2026年2月</option>
+                        <option value="2026-03">2026年3月</option>
+                        <option value="2026-04">2026年4月</option>
+                        <option value="2026-05">2026年5月</option>
+                    </select>
+                </div>
+
+                <!-- FREAKS退会時期 -->
+                <div id="freaksLeaveSection" style="display: none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">FREAKS退会時期</label>
+                    <select id="freaksLeave" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="2026-01">2026年1月</option>
+                        <option value="2026-02">2026年2月</option>
+                        <option value="2026-03">2026年3月</option>
+                        <option value="2026-04">2026年4月</option>
+                        <option value="2026-05">2026年5月</option>
+                        <option value="2026-06">2026年6月or継続中</option>
+                    </select>
+                </div>
+
+                <!-- グッズ購入額 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">グッズ購入額（円）</label>
+                    <input type="number" id="onlineStore" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 10000" min="0">
+                    <p class="text-xs text-gray-500 mt-1">1円=1スピリット ※送料、手数料は除く</p>
+                </div>
+
+                <!-- 来場数 -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ホームゲーム来場数</label>
+                        <input type="number" id="homeGames" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 17" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1試合=2,000スピリット（最大10試合）</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">アウェイゲーム来場数</label>
+                        <input type="number" id="awayGames" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 5" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1試合=2,000スピリット（最大10試合）</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="text-center mb-6">
+                <div class="text-5xl font-bold text-gray-800 mb-2">
+                    <span id="totalSpirit">0</span>
+                    <span class="text-2xl text-gray-600 ml-2">スピリット</span>
+                </div>
+                <div id="rankBadge" class="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-full text-3xl font-bold shadow-lg mt-4">
+                    Bランク
+                </div>
+            </div>
+
+            <div id="nextRankInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p class="text-center text-blue-800">
+                    <span class="font-bold" id="nextRankName">A</span>ランクまで
+                    <span class="text-2xl font-bold mx-2" id="spiritToNext">100,000</span>
+                    スピリット！
+                </p>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">🎁 <span id="currentRankName">B</span>ランクの特典</h3>
+                <ul id="benefitsList" class="space-y-2">
+                    <li class="flex items-start gap-2 text-gray-700">
+                        <span class="text-red-500 mt-1">✓</span>
+                        <span>特典なし</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Rank Reference -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">ランク基準</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg border border-yellow-200">
+                    <span class="font-bold text-yellow-800">Sランク</span>
+                    <span class="text-yellow-700">150,000スピリット以上</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                    <span class="font-bold text-blue-800">Aランク</span>
+                    <span class="text-blue-700">100,000〜149,999スピリット</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                    <span class="font-bold text-green-800">Bランク</span>
+                    <span class="text-green-700">100,000スピリット未満</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 text-sm text-gray-500">
+            <p>※適用期間: 2026年7月〜2027年6月末</p>
+            <p>※このツールは非公式です。正確な情報は公式サイトをご確認ください。</p>
+        </div>
+    </div>
+
+    <script>
+        // イベントリスナーの設定
+        document.getElementById('membershipType').addEventListener('change', handleMembershipChange);
+        document.getElementById('parkingOption').addEventListener('change', calculate);
+        document.getElementById('continuityYears').addEventListener('input', calculate);
+        document.getElementById('academySupport').addEventListener('change', handleAcademyChange);
+        document.getElementById('academyCount').addEventListener('input', calculate);
+        document.getElementById('freaksJoin').addEventListener('change', handleFreaksJoinChange);
+        document.getElementById('freaksLeave').addEventListener('change', calculate);
+        document.getElementById('onlineStore').addEventListener('input', calculate);
+        document.getElementById('homeGames').addEventListener('input', calculate);
+        document.getElementById('awayGames').addEventListener('input', calculate);
+
+        function handleMembershipChange() {
+            const value = document.getElementById('membershipType').value;
+            const isSocio = document.getElementById('membershipType').selectedIndex >= 1 && 
+                           document.getElementById('membershipType').selectedIndex <= 7;
+            
+            document.getElementById('parkingSection').style.display = isSocio ? 'block' : 'none';
+            document.getElementById('continuitySection').style.display = isSocio ? 'block' : 'none';
+            
+            if (!isSocio) {
+                document.getElementById('continuityYears').value = '';
+            }
+            
+            if (value) {
+                document.getElementById('membershipSpirit').textContent = 
+                    parseInt(value).toLocaleString() + 'スピリット';
+            } else {
+                document.getElementById('membershipSpirit').textContent = '';
+            }
+            
+            calculate();
+        }
+
+        function handleAcademyChange() {
+            const checked = document.getElementById('academySupport').checked;
+            document.getElementById('academyCountSection').style.display = checked ? 'block' : 'none';
+            if (!checked) {
+                document.getElementById('academyCount').value = '';
+            }
+            calculate();
+        }
+
+        function handleFreaksJoinChange() {
+            const value = document.getElementById('freaksJoin').value;
+            const show = value && value !== '' && value !== 'not_joined';
+            document.getElementById('freaksLeaveSection').style.display = show ? 'block' : 'none';
+            if (!show) {
+                document.getElementById('freaksLeave').value = '';
+            }
+            calculate();
+        }
+
+        function calculate() {
+            let total = 0;
+
+            // ファンクラブ会費
+            total += parseInt(document.getElementById('membershipType').value || 0);
+
+            // 駐車場
+            if (document.getElementById('parkingSection').style.display !== 'none') {
+                const parking = parseInt(document.getElementById('parkingOption').value || 0);
+                total += parking;
+                if (parking > 0) {
+                    document.getElementById('parkingSpirit').textContent = 
+                        '+' + parking.toLocaleString() + 'スピリット';
+                } else {
+                    document.getElementById('parkingSpirit').textContent = '';
+                }
+            }
+
+            // 継続年数
+            const years = parseInt(document.getElementById('continuityYears').value || 0);
+            if (years >= 10) total += 10000;
+            else if (years >= 5) total += 5000;
+
+            // アカデミー
+            if (document.getElementById('academySupport').checked) {
+                total += parseInt(document.getElementById('academyCount').value || 0) * 5000;
+            }
+
+            // FREAKS
+            const joinDate = document.getElementById('freaksJoin').value;
+            const leaveDate = document.getElementById('freaksLeave').value;
+            if (joinDate && joinDate !== '' && joinDate !== 'not_joined' && leaveDate && leaveDate !== '') {
+                const joinMonth = parseInt(joinDate.split('-')[1]);
+                const leaveMonth = parseInt(leaveDate.split('-')[1]);
+                const months = leaveMonth - joinMonth + 1;
+                total += Math.min(months, 6) * 990;
+            }
+
+            // グッズ
+            total += parseInt(document.getElementById('onlineStore').value || 0);
+
+            // ホーム
+            total += Math.min(parseInt(document.getElementById('homeGames').value || 0), 10) * 2000;
+
+            // アウェイ
+            total += Math.min(parseInt(document.getElementById('awayGames').value || 0), 10) * 2000;
+
+            // 表示更新
+            updateDisplay(total);
+        }
+
+        function updateDisplay(total) {
+            document.getElementById('totalSpirit').textContent = total.toLocaleString();
+
+            let rank = 'B';
+            let rankColor = 'bg-gradient-to-r from-green-500 to-emerald-600';
+            let benefits = ['特典なし'];
+
+            if (total >= 150000) {
+                rank = 'S';
+                rankColor = 'bg-gradient-to-r from-yellow-400 to-amber-500';
+                benefits = [
+                    '公式オンラインストア 5%OFF + 送料無料',
+                    'アントラーズファミリアフェスタ参加権（優先）',
+                    'ランク到達特別ギフト',
+                    '選手サイン入り色紙プレゼント'
+                ];
+            } else if (total >= 100000) {
+                rank = 'A';
+                rankColor = 'bg-gradient-to-r from-blue-500 to-indigo-600';
+                benefits = [
+                    '公式オンラインストア 5%OFF',
+                    'アントラーズファミリアフェスタ参加権（抽選）',
+                    'ランク到達特別ギフト'
+                ];
+            }
+
+            document.getElementById('rankBadge').className = 
+                'inline-block ' + rankColor + ' text-white px-8 py-4 rounded-full text-3xl font-bold shadow-lg mt-4';
+            document.getElementById('rankBadge').textContent = rank + 'ランク';
+            document.getElementById('currentRankName').textContent = rank;
+
+            // 次のランクまで
+            let nextRank = null;
+            let spiritToNext = 0;
+            if (rank === 'B') {
+                nextRank = 'A';
+                spiritToNext = 100000 - total;
+            } else if (rank === 'A') {
+                nextRank = 'S';
+                spiritToNext = 150000 - total;
+            }
+
+            if (nextRank && spiritToNext > 0) {
+                document.getElementById('nextRankInfo').style.display = 'block';
+                document.getElementById('nextRankName').textContent = nextRank;
+                document.getElementById('spiritToNext').textContent = spiritToNext.toLocaleString();
+            } else {
+                document.getElementById('nextRankInfo').style.display = 'none';
+            }
+
+            // 特典リスト
+            const benefitsList = document.getElementById('benefitsList');
+            benefitsList.innerHTML = benefits.map(b => 
+                `<li class="flex items-start gap-2 text-gray-700">
+                    <span class="text-red-500 mt-1">✓</span>
+                    <span>${b}</span>
+                </li>`
+            ).join('');
+        }
+
+        // 初期計算
+        calculate();
+    </script>
+</body>
+</html>
