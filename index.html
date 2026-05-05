@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アントラーズスピリット計算機</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        }
+        .tab-btn { transition: all 0.2s ease; }
+        .goods-row { animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-50 via-white to-blue-50 p-4 md:p-8">
+<div class="max-w-4xl mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-red-700 mb-2 flex items-center justify-center gap-2">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+            </svg>
+            アントラーズスピリット計算機
+        </h1>
+        <p class="text-gray-600">アントラーズメンバーシッププログラムにおけるスピリットを計算して、あなたのランクを確認しよう！</p>
+    </div>
+
+    <!-- Tab Switch -->
+    <div class="flex rounded-xl overflow-hidden border border-gray-200 mb-6 shadow-sm bg-white">
+        <button id="tab-2026" onclick="switchTab('2026')"
+            class="tab-btn flex-1 py-3 px-4 text-sm font-bold bg-red-600 text-white">
+            百年構想リーグ
+            <span class="block text-xs font-normal opacity-80">獲得期間: 2026年1月1日〜6月15日</span>
+        </button>
+        <button id="tab-2027" onclick="switchTab('2027')"
+            class="tab-btn flex-1 py-3 px-4 text-sm font-bold bg-white text-gray-500 border-l border-gray-200">
+            2026/27シーズン <span class="text-xs text-red-500 font-bold ml-1">NEW</span>
+            <span class="block text-xs font-normal opacity-70">獲得期間: 2026年7月1日〜2027年6月15日</span>
+        </button>
+    </div>
+
+    <!-- ========== 2025/26シーズン ========== -->
+    <div id="section-2026">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+                スピリット獲得項目を入力
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ファンクラブ会員種別</label>
+                    <select id="a-membershipType" onchange="handleMembershipA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="78000" data-socio="true">SÓCIO（カテゴリー1）</option>
+                        <option value="68000" data-socio="true">SÓCIO（カテゴリー2）</option>
+                        <option value="72000" data-socio="true">SÓCIO（カテゴリー3）</option>
+                        <option value="62000" data-socio="true">SÓCIO（カテゴリー4）</option>
+                        <option value="59000" data-socio="true">SÓCIO（カテゴリー5）</option>
+                        <option value="57000" data-socio="true">SÓCIO（カテゴリー6）</option>
+                        <option value="45000" data-socio="true">SÓCIO（車椅子席）</option>
+                        <option value="37000">シーズンチケット大人</option>
+                        <option value="3500">シーズンチケットU-18</option>
+                        <option value="3300">ファンクラブレギュラー</option>
+                        <option value="1100">ファンクラブジュニア</option>
+                        <option value="550">ファンクラブライト</option>
+                    </select>
+                    <p id="a-membershipSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+                <div id="a-parkingSection" style="display:none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">駐車場オプション</label>
+                    <select id="a-parkingOption" onchange="calcA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="0">なし</option>
+                        <option value="16500">鹿島サッカースタジアム駅西側駐車場</option>
+                        <option value="22000">B駐車場</option>
+                    </select>
+                    <p id="a-parkingSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+                <div id="a-continuitySection" style="display:none;">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">SÓCIO継続年数</label>
+                    <input type="number" id="a-continuityYears" oninput="calcA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 8" min="0">
+                    <p class="text-xs text-gray-500 mt-1">5〜9年: 5,000スピリット / 10年以上: 10,000スピリット</p>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <input type="checkbox" id="a-academySupport" onchange="handleAcademyA()" class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                        <label for="a-academySupport" class="text-sm font-medium text-gray-700">アカデミーサポートクラブ口数（2026年1月以降の購入口数のみ対象）</label>
+                    </div>
+                    <div id="a-academyCountSection" style="display:none;">
+                        <input type="number" id="a-academyCount" oninput="calcA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 2" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1口=5,000スピリット</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">FREAKS入会時期</label>
+                    <select id="a-freaksJoin" onchange="handleFreaksA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="not_joined">加入していない</option>
+                        <option value="2026-01">2026年1月orそれ以前</option>
+                        <option value="2026-02">2026年2月</option>
+                        <option value="2026-03">2026年3月</option>
+                        <option value="2026-04">2026年4月</option>
+                        <option value="2026-05">2026年5月</option>
+                    </select>
+                </div>
+                <div id="a-freaksLeaveSection" style="display:none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">FREAKS退会時期</label>
+                    <select id="a-freaksLeave" onchange="calcA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="2026-01">2026年1月</option>
+                        <option value="2026-02">2026年2月</option>
+                        <option value="2026-03">2026年3月</option>
+                        <option value="2026-04">2026年4月</option>
+                        <option value="2026-05">2026年5月</option>
+                        <option value="2026-06">2026年6月or継続中</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">グッズ購入額（円）</label>
+                    <p class="text-xs text-gray-500 mb-2">1円=1スピリット ※送料、手数料は除く。複数回購入した場合は行を追加できます。</p>
+                    <div id="a-goodsRows" class="space-y-2">
+                        <div class="goods-row flex items-center gap-2">
+                            <input type="number" oninput="calcA()" class="a-goods-input flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 10000" min="0">
+                            <button onclick="removeGoodsRow(this,'a')" class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none px-1 hidden" title="削除">×</button>
+                        </div>
+                    </div>
+                    <button onclick="addGoodsRow('a')" class="mt-2 flex items-center gap-1 text-sm text-red-600 hover:text-red-800 font-medium transition-colors">
+                        <span class="text-lg leading-none">＋</span> 購入回を追加
+                    </button>
+                    <p id="a-goodsTotal" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ホームゲーム来場数</label>
+                        <input type="number" id="a-homeGames" oninput="calcA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 17" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1試合=2,000スピリット（最大10試合）</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">アウェイゲーム来場数</label>
+                        <input type="number" id="a-awayGames" oninput="calcA()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 5" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1試合=2,000スピリット（最大10試合）</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="text-center mb-6">
+                <div class="text-5xl font-bold text-gray-800 mb-2">
+                    <span id="a-totalSpirit">0</span>
+                    <span class="text-2xl text-gray-600 ml-2">スピリット</span>
+                </div>
+                <div id="a-rankBadge" class="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-full text-3xl font-bold shadow-lg mt-4">Bランク</div>
+            </div>
+            <div id="a-nextRankInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p class="text-center text-blue-800">
+                    <span class="font-bold" id="a-nextRankName">A</span>ランクまで
+                    <span class="text-2xl font-bold mx-2" id="a-spiritToNext">100,000</span>スピリット！
+                </p>
+            </div>
+            <div class="mt-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">🎁 <span id="a-currentRankName">B</span>ランクの特典</h3>
+                <ul id="a-benefitsList" class="space-y-2">
+                    <li class="flex items-start gap-2 text-gray-700"><span class="text-red-500 mt-1">✓</span><span>特典なし</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">ランク基準</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg border border-yellow-200">
+                    <span class="font-bold text-yellow-800">Sランク</span><span class="text-yellow-700">150,000スピリット以上</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                    <span class="font-bold text-blue-800">Aランク</span><span class="text-blue-700">100,000〜149,999スピリット</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                    <span class="font-bold text-green-800">Bランク</span><span class="text-green-700">100,000スピリット未満</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-6 text-sm text-gray-500">
+            <p>※適用期間: 2026年7月〜2027年6月末</p>
+            <p>※このツールは非公式です。正確な情報は公式サイトをご確認ください。</p>
+        </div>
+    </div><!-- /section-2026 -->
+
+
+    <!-- ========== 2026/27シーズン ========== -->
+    <div id="section-2027" style="display:none;">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+                スピリット獲得項目を入力
+            </h2>
+            <div class="space-y-4">
+
+                <!-- 会員種別 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ファンクラブ会員種別</label>
+                    <select id="b-membershipType" onchange="handleMembershipB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="138000" data-socio="true">SÓCIO（カテゴリー1）</option>
+                        <option value="118000" data-socio="true">SÓCIO（カテゴリー2）</option>
+                        <option value="126000" data-socio="true">SÓCIO（カテゴリー3）</option>
+                        <option value="106000" data-socio="true">SÓCIO（カテゴリー4）</option>
+                        <option value="100000" data-socio="true">SÓCIO（カテゴリー5）</option>
+                        <option value="96000"  data-socio="true">SÓCIO（カテゴリー6）</option>
+                        <option value="72000"  data-socio="true">SÓCIO（車椅子席）</option>
+                        <option value="" data-stseason="true">シーズンチケット大人</option>
+                        <option value="1800">シーズンチケットU-18</option>
+                        <option value="5500">ファンクラブレギュラー</option>
+                        <option value="550">ファンクラブライト</option>
+                        <option value="2200">ファンクラブジュニア</option>
+                    </select>
+                    <p id="b-membershipSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- シーズンチケット大人：購入人数 -->
+                <div id="b-stPersonSection" style="display:none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">購入人数（グループ購入の場合は人数を選択）</label>
+                    <select id="b-stPersons" onchange="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="34100">1人</option>
+                        <option value="34400">2人</option>
+                        <option value="34200">3人</option>
+                        <option value="34300">4人</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">1人あたりのスピリットが適用されます。</p>
+                    <p id="b-stSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- 駐車場 -->
+                <div id="b-parkingSection" style="display:none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">駐車場オプション</label>
+                    <select id="b-parkingOption" onchange="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="0">なし</option>
+                        <option value="33000">鹿島サッカースタジアム駅西側駐車場</option>
+                        <option value="44000">B駐車場</option>
+                    </select>
+                    <p id="b-parkingSpirit" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- 継続年数 -->
+                <div id="b-continuitySection" style="display:none;">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">SÓCIO継続年数</label>
+                    <input type="number" id="b-continuityYears" oninput="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 8" min="0">
+                    <p class="text-xs text-gray-500 mt-1">5〜9年: 5,000スピリット / 10年以上: 10,000スピリット</p>
+                </div>
+
+                <!-- アカデミー（プラン別） -->
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <input type="checkbox" id="b-academySupport" onchange="handleAcademyB()" class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                        <label for="b-academySupport" class="text-sm font-medium text-gray-700">アカデミーサポートクラブ（獲得期間内の購入口数のみ対象）</label>
+                    </div>
+                    <div id="b-academySection" style="display:none;" class="space-y-3 ml-4 border-l-4 border-red-200 pl-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">5,000円プラン（口数）</label>
+                            <input type="number" id="b-academy5k" oninput="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 2" min="0">
+                            <p class="text-xs text-gray-500 mt-1">1口=5,000スピリット</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">10,000円プラン（口数）</label>
+                            <input type="number" id="b-academy10k" oninput="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 1" min="0">
+                            <p class="text-xs text-gray-500 mt-1">1口=10,000スピリット</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FREAKS -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">FREAKS入会時期</label>
+                    <select id="b-freaksJoin" onchange="handleFreaksB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="not_joined">加入していない</option>
+                        <option value="2026-07">2026年7月orそれ以前</option>
+                        <option value="2026-08">2026年8月</option>
+                        <option value="2026-09">2026年9月</option>
+                        <option value="2026-10">2026年10月</option>
+                        <option value="2026-11">2026年11月</option>
+                        <option value="2026-12">2026年12月</option>
+                        <option value="2027-01">2027年1月</option>
+                        <option value="2027-02">2027年2月</option>
+                        <option value="2027-03">2027年3月</option>
+                        <option value="2027-04">2027年4月</option>
+                        <option value="2027-05">2027年5月</option>
+                        <option value="2027-06">2027年6月</option>
+                    </select>
+                </div>
+                <div id="b-freaksLeaveSection" style="display:none;" class="ml-4 border-l-4 border-red-200 pl-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">FREAKS退会時期（継続中の場合は2027年6月を選択）</label>
+                    <select id="b-freaksLeave" onchange="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">選択してください</option>
+                        <option value="2026-07">2026年7月</option>
+                        <option value="2026-08">2026年8月</option>
+                        <option value="2026-09">2026年9月</option>
+                        <option value="2026-10">2026年10月</option>
+                        <option value="2026-11">2026年11月</option>
+                        <option value="2026-12">2026年12月</option>
+                        <option value="2027-01">2027年1月</option>
+                        <option value="2027-02">2027年2月</option>
+                        <option value="2027-03">2027年3月</option>
+                        <option value="2027-04">2027年4月</option>
+                        <option value="2027-05">2027年5月</option>
+                        <option value="2027-06">2027年6月（継続中）</option>
+                    </select>
+                </div>
+
+                <!-- グッズ -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">グッズ購入額（円）</label>
+                    <p class="text-xs text-gray-500 mb-2">1円=1スピリット ※送料、手数料は除く。複数回購入した場合は行を追加できます。</p>
+                    <div id="b-goodsRows" class="space-y-2">
+                        <div class="goods-row flex items-center gap-2">
+                            <input type="number" oninput="calcB()" class="b-goods-input flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 10000" min="0">
+                            <button onclick="removeGoodsRow(this,'b')" class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none px-1 hidden" title="削除">×</button>
+                        </div>
+                    </div>
+                    <button onclick="addGoodsRow('b')" class="mt-2 flex items-center gap-1 text-sm text-red-600 hover:text-red-800 font-medium transition-colors">
+                        <span class="text-lg leading-none">＋</span> 購入回を追加
+                    </button>
+                    <p id="b-goodsTotal" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- 来場数（上限なし） -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ホームゲーム来場数</label>
+                        <input type="number" id="b-homeGames" oninput="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 17" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1試合=2,000スピリット（上限なし）</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">アウェイゲーム来場数</label>
+                        <input type="number" id="b-awayGames" oninput="calcB()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="例: 5" min="0">
+                        <p class="text-xs text-gray-500 mt-1">1試合=2,000スピリット（上限なし）</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 結果 -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="text-center mb-6">
+                <div class="text-5xl font-bold text-gray-800 mb-2">
+                    <span id="b-totalSpirit">0</span>
+                    <span class="text-2xl text-gray-600 ml-2">スピリット</span>
+                </div>
+                <div id="b-rankBadge" class="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-full text-3xl font-bold shadow-lg mt-4">Bランク</div>
+            </div>
+            <div id="b-nextRankInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p class="text-center text-blue-800">
+                    <span class="font-bold" id="b-nextRankName">A</span>ランクまで
+                    <span class="text-2xl font-bold mx-2" id="b-spiritToNext">200,000</span>スピリット！
+                </p>
+            </div>
+            <div class="mt-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">🎁 <span id="b-currentRankName">B</span>ランクの特典</h3>
+                <ul id="b-benefitsList" class="space-y-2">
+                    <li class="flex items-start gap-2 text-gray-700"><span class="text-red-500 mt-1">✓</span><span>特典なし</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ランク基準 -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">ランク基準</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg border border-yellow-200">
+                    <span class="font-bold text-yellow-800">Sランク</span><span class="text-yellow-700">300,000スピリット以上</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                    <span class="font-bold text-blue-800">Aランク</span><span class="text-blue-700">200,000〜299,999スピリット</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                    <span class="font-bold text-green-800">Bランク</span><span class="text-green-700">199,999スピリット以下</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-6 text-sm text-gray-500">
+            <p>※獲得期間: 2026年7月1日〜2027年6月15日　適用期間: 2027年7月〜2028年6月末</p>
+            <p>※このツールは非公式です。正確な情報は公式サイトをご確認ください。</p>
+        </div>
+    </div><!-- /section-2027 -->
+
+</div><!-- /max-w-4xl -->
+
+<script>
+    // ==================== タブ切り替え ====================
+    function switchTab(season) {
+        const is2026 = season === '2026';
+        document.getElementById('section-2026').style.display = is2026 ? 'block' : 'none';
+        document.getElementById('section-2027').style.display = is2026 ? 'none' : 'block';
+        const t26 = document.getElementById('tab-2026');
+        const t27 = document.getElementById('tab-2027');
+        if (is2026) {
+            t26.className = 'tab-btn flex-1 py-3 px-4 text-sm font-bold bg-red-600 text-white';
+            t27.className = 'tab-btn flex-1 py-3 px-4 text-sm font-bold bg-white text-gray-500 border-l border-gray-200';
+        } else {
+            t26.className = 'tab-btn flex-1 py-3 px-4 text-sm font-bold bg-white text-gray-500 border-r border-gray-200';
+            t27.className = 'tab-btn flex-1 py-3 px-4 text-sm font-bold bg-red-600 text-white';
+        }
+    }
+
+    // ==================== グッズ行の追加・削除 ====================
+    function addGoodsRow(prefix) {
+        const container = document.getElementById(prefix + '-goodsRows');
+        const row = document.createElement('div');
+        row.className = 'goods-row flex items-center gap-2';
+        row.innerHTML =
+            '<input type="number" oninput="' + (prefix === 'a' ? 'calcA' : 'calcB') + '()" ' +
+            'class="' + prefix + '-goods-input flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-transparent" ' +
+            'placeholder="例: 5000" min="0">' +
+            '<button onclick="removeGoodsRow(this,\'' + prefix + '\')" ' +
+            'class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none px-1" title="削除">×</button>';
+        container.appendChild(row);
+        updateDeleteButtons(prefix);
+        if (prefix === 'a') calcA(); else calcB();
+    }
+
+    function removeGoodsRow(btn, prefix) {
+        btn.closest('.goods-row').remove();
+        updateDeleteButtons(prefix);
+        if (prefix === 'a') calcA(); else calcB();
+    }
+
+    function updateDeleteButtons(prefix) {
+        const rows = document.querySelectorAll('#' + prefix + '-goodsRows .goods-row');
+        rows.forEach(function(row) {
+            const btn = row.querySelector('button');
+            if (btn) btn.classList.toggle('hidden', rows.length === 1);
+        });
+    }
+
+    function getGoodsTotal(prefix) {
+        let total = 0;
+        document.querySelectorAll('.' + prefix + '-goods-input').forEach(function(inp) {
+            total += parseInt(inp.value || 0);
+        });
+        return total;
+    }
+
+    // ==================== 2025/26 ロジック ====================
+    function handleMembershipA() {
+        const sel = document.getElementById('a-membershipType');
+        const opt = sel.options[sel.selectedIndex];
+        const isSocio = opt && opt.getAttribute('data-socio') === 'true';
+        const val = sel.value;
+        document.getElementById('a-parkingSection').style.display = isSocio ? 'block' : 'none';
+        document.getElementById('a-continuitySection').style.display = isSocio ? 'block' : 'none';
+        if (!isSocio) document.getElementById('a-continuityYears').value = '';
+        document.getElementById('a-membershipSpirit').textContent = val ? parseInt(val).toLocaleString() + 'スピリット' : '';
+        calcA();
+    }
+
+    function handleAcademyA() {
+        const checked = document.getElementById('a-academySupport').checked;
+        document.getElementById('a-academyCountSection').style.display = checked ? 'block' : 'none';
+        if (!checked) document.getElementById('a-academyCount').value = '';
+        calcA();
+    }
+
+    function handleFreaksA() {
+        const val = document.getElementById('a-freaksJoin').value;
+        const show = val && val !== 'not_joined';
+        document.getElementById('a-freaksLeaveSection').style.display = show ? 'block' : 'none';
+        if (!show) document.getElementById('a-freaksLeave').value = '';
+        calcA();
+    }
+
+    function calcA() {
+        let total = 0;
+
+        total += parseInt(document.getElementById('a-membershipType').value || 0);
+
+        if (document.getElementById('a-parkingSection').style.display !== 'none') {
+            const p = parseInt(document.getElementById('a-parkingOption').value || 0);
+            total += p;
+            document.getElementById('a-parkingSpirit').textContent = p > 0 ? '+' + p.toLocaleString() + 'スピリット' : '';
+        }
+
+        const y = parseInt(document.getElementById('a-continuityYears').value || 0);
+        if (y >= 10) total += 10000; else if (y >= 5) total += 5000;
+
+        if (document.getElementById('a-academySupport').checked) {
+            total += parseInt(document.getElementById('a-academyCount').value || 0) * 5000;
+        }
+
+        const join = document.getElementById('a-freaksJoin').value;
+        const leave = document.getElementById('a-freaksLeave').value;
+        if (join && join !== 'not_joined' && leave) {
+            const jm = parseInt(join.split('-')[1]);
+            const lm = parseInt(leave.split('-')[1]);
+            total += Math.min(lm - jm + 1, 6) * 990;
+        }
+
+        const goods = getGoodsTotal('a');
+        total += goods;
+        document.getElementById('a-goodsTotal').textContent = goods > 0 ? '合計 ' + goods.toLocaleString() + '円 = ' + goods.toLocaleString() + 'スピリット' : '';
+
+        total += Math.min(parseInt(document.getElementById('a-homeGames').value || 0), 10) * 2000;
+        total += Math.min(parseInt(document.getElementById('a-awayGames').value || 0), 10) * 2000;
+
+        updateDisplay('a', total, 100000, 150000);
+    }
+
+    // ==================== 2026/27 ロジック ====================
+    function handleMembershipB() {
+        const sel = document.getElementById('b-membershipType');
+        const opt = sel.options[sel.selectedIndex];
+        const isSocio = opt && opt.getAttribute('data-socio') === 'true';
+        const isST    = opt && opt.getAttribute('data-stseason') === 'true';
+        const val = sel.value;
+
+        document.getElementById('b-parkingSection').style.display = isSocio ? 'block' : 'none';
+        document.getElementById('b-continuitySection').style.display = isSocio ? 'block' : 'none';
+        document.getElementById('b-stPersonSection').style.display = isST ? 'block' : 'none';
+
+        if (!isSocio) document.getElementById('b-continuityYears').value = '';
+        if (!isST) {
+            document.getElementById('b-stPersons').value = '';
+            document.getElementById('b-stSpirit').textContent = '';
+        }
+
+        document.getElementById('b-membershipSpirit').textContent = val ? parseInt(val).toLocaleString() + 'スピリット' : '';
+        calcB();
+    }
+
+    function handleAcademyB() {
+        const checked = document.getElementById('b-academySupport').checked;
+        document.getElementById('b-academySection').style.display = checked ? 'block' : 'none';
+        if (!checked) {
+            document.getElementById('b-academy5k').value = '';
+            document.getElementById('b-academy10k').value = '';
+        }
+        calcB();
+    }
+
+    function handleFreaksB() {
+        const val = document.getElementById('b-freaksJoin').value;
+        const show = val && val !== 'not_joined';
+        document.getElementById('b-freaksLeaveSection').style.display = show ? 'block' : 'none';
+        if (!show) document.getElementById('b-freaksLeave').value = '';
+        calcB();
+    }
+
+    // 年をまたぐFREAKS月数計算
+    function freaksMonths(joinStr, leaveStr) {
+        if (!joinStr || joinStr === 'not_joined' || !leaveStr) return 0;
+        const parts1 = joinStr.split('-');
+        const parts2 = leaveStr.split('-');
+        const jy = parseInt(parts1[0]), jm = parseInt(parts1[1]);
+        const ly = parseInt(parts2[0]), lm = parseInt(parts2[1]);
+        const months = (ly - jy) * 12 + (lm - jm) + 1;
+        return Math.max(months, 0);
+    }
+
+    function calcB() {
+        let total = 0;
+
+        // 会員種別
+        const sel = document.getElementById('b-membershipType');
+        const opt = sel.options[sel.selectedIndex];
+        const isST = opt && opt.getAttribute('data-stseason') === 'true';
+        if (!isST) {
+            total += parseInt(sel.value || 0);
+        }
+
+        // シーズンチケット大人（人数別）
+        if (document.getElementById('b-stPersonSection').style.display !== 'none') {
+            const stVal = parseInt(document.getElementById('b-stPersons').value || 0);
+            total += stVal;
+            document.getElementById('b-stSpirit').textContent = stVal > 0 ? stVal.toLocaleString() + 'スピリット' : '';
+        }
+
+        // 駐車場
+        if (document.getElementById('b-parkingSection').style.display !== 'none') {
+            const p = parseInt(document.getElementById('b-parkingOption').value || 0);
+            total += p;
+            document.getElementById('b-parkingSpirit').textContent = p > 0 ? '+' + p.toLocaleString() + 'スピリット' : '';
+        }
+
+        // 継続年数
+        const y = parseInt(document.getElementById('b-continuityYears').value || 0);
+        if (y >= 10) total += 10000; else if (y >= 5) total += 5000;
+
+        // アカデミー
+        if (document.getElementById('b-academySupport').checked) {
+            total += parseInt(document.getElementById('b-academy5k').value || 0) * 5000;
+            total += parseInt(document.getElementById('b-academy10k').value || 0) * 10000;
+        }
+
+        // FREAKS（年またぎ対応）
+        const join = document.getElementById('b-freaksJoin').value;
+        const leave = document.getElementById('b-freaksLeave').value;
+        if (join && join !== 'not_joined' && leave) {
+            total += freaksMonths(join, leave) * 990;
+        }
+
+        // グッズ
+        const goods = getGoodsTotal('b');
+        total += goods;
+        document.getElementById('b-goodsTotal').textContent = goods > 0 ? '合計 ' + goods.toLocaleString() + '円 = ' + goods.toLocaleString() + 'スピリット' : '';
+
+        // 来場数（上限なし）
+        total += parseInt(document.getElementById('b-homeGames').value || 0) * 2000;
+        total += parseInt(document.getElementById('b-awayGames').value || 0) * 2000;
+
+        updateDisplay('b', total, 200000, 300000);
+    }
+
+    // ==================== 共通：表示更新 ====================
+    function updateDisplay(prefix, total, threshA, threshS) {
+        document.getElementById(prefix + '-totalSpirit').textContent = total.toLocaleString();
+
+        let rank = 'B', rankColor = 'bg-gradient-to-r from-green-500 to-emerald-600';
+        let benefits = ['特典なし'];
+
+        if (total >= threshS) {
+            rank = 'S';
+            rankColor = 'bg-gradient-to-r from-yellow-400 to-amber-500';
+            benefits = [
+                '公式オンラインストア 5%OFF + 送料無料',
+                'アントラーズファミリアフェスタ参加権（優先）',
+                'ランク到達特別ギフト',
+                '選手サイン入り色紙プレゼント'
+            ];
+        } else if (total >= threshA) {
+            rank = 'A';
+            rankColor = 'bg-gradient-to-r from-blue-500 to-indigo-600';
+            benefits = [
+                '公式オンラインストア 5%OFF',
+                'アントラーズファミリアフェスタ参加権（抽選）',
+                'ランク到達特別ギフト'
+            ];
+        }
+
+        document.getElementById(prefix + '-rankBadge').className =
+            'inline-block ' + rankColor + ' text-white px-8 py-4 rounded-full text-3xl font-bold shadow-lg mt-4';
+        document.getElementById(prefix + '-rankBadge').textContent = rank + 'ランク';
+        document.getElementById(prefix + '-currentRankName').textContent = rank;
+
+        let nextRank = null, spiritToNext = 0;
+        if (rank === 'B') { nextRank = 'A'; spiritToNext = threshA - total; }
+        else if (rank === 'A') { nextRank = 'S'; spiritToNext = threshS - total; }
+
+        if (nextRank && spiritToNext > 0) {
+            document.getElementById(prefix + '-nextRankInfo').style.display = 'block';
+            document.getElementById(prefix + '-nextRankName').textContent = nextRank;
+            document.getElementById(prefix + '-spiritToNext').textContent = spiritToNext.toLocaleString();
+        } else {
+            document.getElementById(prefix + '-nextRankInfo').style.display = 'none';
+        }
+
+        document.getElementById(prefix + '-benefitsList').innerHTML = benefits.map(function(b) {
+            return '<li class="flex items-start gap-2 text-gray-700"><span class="text-red-500 mt-1">✓</span><span>' + b + '</span></li>';
+        }).join('');
+    }
+
+    // 初期計算
+    calcA();
+    calcB();
+</script>
+</body>
+</html>
